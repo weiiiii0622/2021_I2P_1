@@ -2,70 +2,64 @@
 
 int main(){
 
-    int n;
+    char input[999999];
 
-    scanf("%d", &n);
+    char banana[6]={'B','A','N','A','N','A'};
 
-    int i1=0,i2=n*2-1; //x邊界(i1~i2)
+    int i=0;int j=0;
+    char check[999999];
+    int flag=1;
+    while(scanf("%s", input) != EOF){
+        while(1){
+            if(input[i]=='0'||input[i]=='\0'){
 
-    int j1=0,j2=n*2-1; //y邊界(j1~j2)
+                printf("No potassium.\n");
+                break;
+            }
 
-    int grid[n*2][n*2];
+            else if(input[i]=='/'){
 
-    int x=0,y=0;//第(x,y)項
+                j++;
+                check[i-j*2+1]=' ';
+            }
 
-    int num=1;
+            else{
+                check[i-2*j]=input[i];
+            }
 
-    int max=n*n*4;//網格最大值
+            printf("Xx %s xX\n", check);
 
-    while(num<=max){
+            int k=0;
+            flag=1;
 
-        for(x=i1,y=j1;x<=i2;x++,num++){
-            grid[x][y]=num;
+            for(k=0;k<i-2*j+1;k++){
+                if(check[k]==banana[k]){
+                    flag=1;
+                }
 
+                else{
+                    flag=0;
+                    break;
+                }
+            }
+            if(flag){
+                if(k==0){}
+                else if(k!=6){
+                    printf("%d\n", k);
+                }
+
+                else{
+                    printf("6\nPotassium!\n");
+                    break;
+                }
+            }
+            else{
+                    printf("-1\n");
+            }
+            i++;
         }
-        j1++;
-
-        for(x=i2,y=j1;y<=j2;y++,num++){
-            grid[x][y]=num;  
-
-        }
-        i2--;
-        
-        if(num>max){
-            break;
-        }
-
-        for(x=i2,y=j2;i1<=x;x--,num++){
-            grid[x][y]=num;
-
-        }
-        j2--;
-
-        for(x=i1,y=j2;j1<=y;y--,num++){
-            grid[x][y]=num;
-
-        }
-        i1++;
+        i=0;
+        j=0;
     }
-
-    x=0,y=0;
-
-    while(y<=n*2-1){
-
-        for(x=0;x<=n*2-1;x++){
-
-            printf("%d ", grid[x][y]);
-        }
-        
-
-        y=y+1;
-
-        printf("\b\n");
-    }
-
-
-
     return 0;
-
 }
