@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int max(int, int);
+#define max(a,b) ((a>=b) ? a : b)
 
 int main(){
 
@@ -15,7 +15,7 @@ int main(){
         int a_len = strlen(a), b_len = strlen(b);
         int final = 0;
         for(int i=max((a_len-1),(b_len-1)); i>=0; i--){
-            int j = a_len-i-1, k = 0;
+            int j = a_len-1-i, k = 0;
             int flag = 0;
             while(k <= i){
                 if(a[j] != b[k]){
@@ -39,13 +39,4 @@ int main(){
     }
 
     return 0;
-}
-
-int max(int a, int b){
-    if(a >= b){
-        return a;
-    }
-    else{
-        return b;
-    }
 }

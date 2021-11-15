@@ -32,16 +32,13 @@ int combination(int n, int k){
     }
     else{
         if(n == k || k == 0){
-            dp[n][k] = 1;
-            return 1;
+            return dp[n][k] = 1;
         }
         else if(k == 1 || n-k == 1){
-            dp[n][k] = n;
-            return n;
+            return dp[n][k] = n;
         }
         else{
-            dp[n][k] = (combination(n-1, k)+combination(n-1, k-1))%10007;
-            return dp[n][k];
+            return dp[n][k] = (combination(n-1, k) + combination(n-1, k-1)) % 10007;
         }
     }
 }
