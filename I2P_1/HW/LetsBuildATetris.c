@@ -26,12 +26,25 @@ int main(){
                     lowest = top[j];
                 }
             }
-            else if(floor[j] > i && grid[i][j] == 'x'){
-                floor[j] =  i;
+            // else if(floor[j] > i && grid[i][j] == 'x'){
+            //     floor[j] =  i;
+            // }
+        }
+    }
+
+    for(int j=0; j<m; j++){
+        for(int i=top[j]; i<n; i++){
+            if(grid[i][j] == 'x'){
+                floor[j] = i;
+                break;
             }
         }
-        
     }
+
+    // printf("\n");
+    // for(int i=0; i<m; i++){
+    //     printf("%d: top=%d floor=%d\n", i, top[i], floor[i]);
+    // }
 
 
     //計算最大下移距離
@@ -46,7 +59,7 @@ int main(){
         }
 
     }
-    //printf("min_drop = %d\n", min_drop);
+    // printf("min_drop = %d\n", min_drop);
 
     //移動盤面
     for(int i=lowest-1; i>=0; i--){
@@ -78,7 +91,7 @@ int main(){
             break;
         }
     }
-    //printf("kill = %d\n", kill);
+    // printf("kill = %d\n", kill);
 
     //印出最終盤面
     for(int i=0; i<kill; i++){
