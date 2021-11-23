@@ -1,67 +1,103 @@
-#include<stdio.h>
-#define MAX(a, b) a = (a>b?a:b)
-int t,n,m,ans[2],cnt;
-char c[1005][1005];
-void main(){
-	scanf("%d\n",&t);
-	while(t--){
-		scanf("%d%d",&n,&m);
-		ans[0] = ans[1] = 0;
-		for(int i=0;i<n;i++){
-			scanf("%s",c[i]);
-		} 
-		for(int i=0;i<n;i++)                           //each row
-			for(int j=0;j<m;j++){
-				if(j==0 || c[i][j]!=c[i][j-1])
-					cnt = 1;
-				else
-					cnt++; 
-				MAX(ans[c[i][j]=='#'], cnt);
-			}
-		for(int j=0;j<m;j++)                           //each column
-			for(int i=0;i<n;i++){
-				if(i==0 || c[i][j]!=c[i-1][j])
-					cnt = 1;
-				else
-					cnt++; 
-				MAX(ans[c[i][j]=='#'], cnt);
-			}
-        for(int i=0;i<n;i++)                           //lower left corner
-            for(int k=0;i+k<n && k<m;k++){
-                printf("%d %d\n", i+k, k);
-                if(k==0 || c[i+k][k]!=c[i+k-1][k-1])
-
-                    cnt = 1;
-                else
-                    cnt++; 
-                MAX(ans[c[i+k][k]=='#'], cnt);
-            }
-		for(int j=0;j<m;j++)                           //upper right corner
-			for(int k=0;k<n && j+k<m;k++){
-				if(k==0 || c[k][j+k]!=c[k-1][j+k-1])
-					cnt = 1;
-				else
-					cnt++; 
-				MAX(ans[c[k][j+k]=='#'], cnt);
-			}
-		for(int j=0;j<m;j++)                           //upper left corner
-			for(int k=0;k<n && j-k>=0;k++){
-				if(k==0 || c[k][j-k]!=c[k-1][j-k+1])
-					cnt = 1;
-				else
-					cnt++; 
-				MAX(ans[c[k][j-k]=='#'], cnt);
-			}
-		for(int i=0;i<n;i++)                           //down right corner
-			for(int k=0;i+k<n && m-1-k>=0;k++){
-				if(k==0 || c[i+k][m-1-k]!=c[i+k-1][m-k])
-					cnt = 1;
-				else
-					cnt++; 
-				MAX(ans[c[i+k][m-1-k]=='#'], cnt);
-			}
-		printf("%d %d\n",ans[0],ans[1]);
-	}
+#include <stdio.h>
+#include <math.h>
+int height[20];
+int color[20];
+int route[20];
+void jump(int s, int e, int step);
+void cost(int step);
+int currentstep;
+int sink[16];
+int N, start, end, maxenergy, maxstep;
+int main()
+{
+    scanf("%d %d %d", &N, &start, &end);
+    for(int i=1; i<=N; i++)
+    {
+        scanf("%d", &height[i]);
+    }
+    for(int i=1; i<=N; i++)
+    {
+        scanf("%d", &color[i]);
+    }
+    route[1]=start;
+    sink[start]=1;
+    jump(start, end, 2);
+    printf("%d %d\n", maxenergy, maxstep-2);
+    return 0;
 }
 
-
+void jump(int s, int e, int step)
+{
+    if(s==e)
+    {
+        /*for(int i=1; i<step; i++)
+        {
+            printf("%d ", route[i]);
+        }
+        printf("\n");*/
+        /*for(int i=1; i<=N; i++)
+        {
+            printf("%d ", sink[i]);
+        }
+        printf("\n");*/
+        cost(step);
+        sink[route[step]]=0;
+        return;
+    }
+    currentstep=s+1;//1
+    if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+    {
+        route[step]=currentstep;
+        sink[currentstep]=1;
+        jump(currentstep, e, step+1);
+        sink[route[step]]=0;
+    }
+    currentstep=s-1;//2
+    if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+    {
+        route[step]=currentstep;
+        sink[currentstep]=1;
+        jump(currentstep, e, step+1);
+        sink[route[step]]=0;
+    }
+    currentstep=s;
+    for(int i=1; i<=N; i++)//3
+    {
+        currentstep=s;
+        if(color[i]==color[s] && i!=s)
+        {
+            currentstep=i;
+            if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+            {
+                route[step]=currentstep;
+                sink[currentstep]=1;
+                jump(currentstep, e, step+1);
+                sink[route[step]]=0;
+            }
+        }
+    }
+    sink[route[step]]=0;
+    return;
+}
+void cost(int step)
+{
+    int energy=0;
+   
+    for(int i=1; i<step-1; i++)
+    {
+        energy+=abs(height[route[i+1]]-height[route[i]])*abs(route[i+1]-route[i]);
+    }
+    //printf("%d %d\n", energy, step-2);
+    if(energy>maxenergy)
+    {
+        maxenergy=energy;
+        maxstep=step;
+    }
+    else if(energy==maxenergy)
+    {
+        if(maxstep<step)
+        {
+            maxstep=step;
+        }
+    }
+}
