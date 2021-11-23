@@ -28,7 +28,7 @@ void main(){
 			}
         for(int i=0;i<n;i++)                           //lower left corner
             for(int k=0;i+k<n && k<m;k++){
-                printf("%d %d\n", i+k, k);
+                printf("%d %d\n", i+k, i);
                 if(k==0 || c[i+k][k]!=c[i+k-1][k-1])
 
                     cnt = 1;
@@ -63,5 +63,3 @@ void main(){
 		printf("%d %d\n",ans[0],ans[1]);
 	}
 }
-
-
