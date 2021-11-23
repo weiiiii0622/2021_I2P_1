@@ -48,22 +48,18 @@ void cost(int step){
 
     cur_cost = 0;
 
-    // for(int i=0; i<step; i++){
-    //     printf("%d ", jumped[i]);
-    // }
-    // printf("\n");
-
-    for(int i=0; i<step-1; i++){
+    // step-1 改成 step
+    for(int i=0; i<step; i++){
         cur_cost += (abs(jumped[i+1]-jumped[i])) * (abs(energy[jumped[i+1]]-energy[jumped[i]]));
     }
     
     if(cur_cost > max_cost){
         max_cost = cur_cost;
-        max_steps = step-1;
+        max_steps = step;
     }
     else if(cur_cost == max_cost){
-        if(step-1 > max_steps){
-            max_steps = step-1;
+        if(step > max_steps){
+            max_steps = step;
         }
     }
 }
@@ -73,7 +69,7 @@ void jump(int rock, int step){
 
     if(rock == t){
 
-        jumped[++step] = rock;
+        //jumped[++step] = rock;
         cost(step);
     }
     else{

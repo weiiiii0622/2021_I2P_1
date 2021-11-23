@@ -1,0 +1,1 @@
+void shift(char *start, char *end);
