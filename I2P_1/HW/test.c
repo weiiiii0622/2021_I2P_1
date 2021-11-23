@@ -1,100 +1,103 @@
 #include <stdio.h>
-#include <string.h>
-
-int main(){
-
-    int n, m;
-    scanf("%d %d", &n, &m);
-
-    int floor[m], top[m], final_status[n]; //floor 紀錄'x'的最高高度 top 紀錄'o'的最低高度 final_status 紀錄最後每行會不會被消掉
-    char grid[n][m]; //紀錄盤面
-
-    memset(top, 0, m*sizeof(top[0]));
-    memset(final_status, 0, n*sizeof(final_status[0]));
-    for(int i=0; i<m; i++){
-        floor[i] = n;
+#include <math.h>
+int height[20];
+int color[20];
+int route[20];
+void jump(int s, int e, int step);
+void cost(int step);
+int currentstep;
+int sink[16];
+int N, start, end, maxenergy, maxstep;
+int main()
+{
+    scanf("%d %d %d", &N, &start, &end);
+    for(int i=1; i<=N; i++)
+    {
+        scanf("%d", &height[i]);
     }
-
-    int lowest = 1;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            scanf(" %c", &grid[i][j]);
-
-            if(grid[i][j] == 'o'){
-                top[j] = i+1;
-                if(top[j] > lowest){ //lowest 紀錄最靠近下面的'o'的高度
-                    lowest = top[j];
-                }
-            }
-            else if(floor[j] > i && grid[i][j] == 'x'){
-                floor[j] =  i;
-            }
-        }
-        
+    for(int i=1; i<=N; i++)
+    {
+        scanf("%d", &color[i]);
     }
-
-
-    //計算最大下移距離
-    int min_drop = n;
-    for(int i=0; i<m; i++){
-        if(top[i] != 0){
-            int drop = floor[i] - top[i];
-
-            if(drop < min_drop){
-                min_drop = drop;
-            }
-        }
-
-    }
-    //printf("min_drop = %d\n", min_drop);
-
-    //移動盤面
-    for(int i=lowest-1; i>=0; i--){
-        for(int j=0; j<m; j++){
-            if(grid[i][j] == 'o'){
-                grid[i][j] = '.';
-                grid[i+min_drop][j] = 'x';
-            }
-        }
-    }
-
-
-    //檢查會不會被消掉 當整排為'.'時即可停止檢查
-    int kill = 0;
-    for(int i=n-1; i>=0; i--){
-        int flag = 1, dot = 0;
-        for(int j=0; j<m; j++){
-            if(grid[i][j] == '.'){
-                flag = 0;
-                dot++;
-            }
-        }
-
-        if(flag == 1){
-            kill++;
-            final_status[i] = 1;
-        }
-        else if(dot == m){
-            break;
-        }
-    }
-    //printf("kill = %d\n", kill);
-
-    //印出最終盤面
-    for(int i=0; i<kill; i++){
-        for(int j=0; j<m; j++){
-            printf(".");
-        }
-        printf("\n");
-    }
-    for(int i=0; i<n; i++){
-        if(final_status[i] == 0){
-            for(int j=0; j<m; j++){
-                printf("%c", grid[i][j]);
-            }
-            printf("\n");
-        }
-    }
-
+    route[1]=start;
+    sink[start]=1;
+    jump(start, end, 2);
+    printf("%d %d\n", maxenergy, maxstep-2);
     return 0;
+}
+
+void jump(int s, int e, int step)
+{
+    if(s==e)
+    {
+        /*for(int i=1; i<step; i++)
+        {
+            printf("%d ", route[i]);
+        }
+        printf("\n");*/
+        /*for(int i=1; i<=N; i++)
+        {
+            printf("%d ", sink[i]);
+        }
+        printf("\n");*/
+        cost(step);
+        sink[route[step]]=0;
+        return;
+    }
+    currentstep=s+1;//1
+    if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+    {
+        route[step]=currentstep;
+        sink[currentstep]=1;
+        jump(currentstep, e, step+1);
+        sink[route[step]]=0;
+    }
+    currentstep=s-1;//2
+    if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+    {
+        route[step]=currentstep;
+        sink[currentstep]=1;
+        jump(currentstep, e, step+1);
+        sink[route[step]]=0;
+    }
+    currentstep=s;
+    for(int i=1; i<=N; i++)//3
+    {
+        currentstep=s;
+        if(color[i]==color[s] && i!=s)
+        {
+            currentstep=i;
+            if(sink[currentstep]==0 && currentstep<=N && currentstep>0 )
+            {
+                route[step]=currentstep;
+                sink[currentstep]=1;
+                jump(currentstep, e, step+1);
+                sink[route[step]]=0;
+            }
+        }
+    }
+    sink[route[step]]=0;
+    return;
+}
+void cost(int step)
+{
+    int energy=0;
+   
+    for(int i=1; i<step-1; i++)
+    {
+        energy+=abs(height[route[i+1]]-height[route[i]])*abs(route[i+1]-route[i]);
+    }
+    //printf("%d %d\n", energy, step-2);
+    if(energy>maxenergy)
+    {
+        maxenergy=energy;
+        maxstep=step;
+    }
+    else if(energy==maxenergy)
+    {
+        if(maxstep<step)
+        {
+            maxstep=step;
+        }
+    }
 }

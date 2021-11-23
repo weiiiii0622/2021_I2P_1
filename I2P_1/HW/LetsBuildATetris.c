@@ -22,13 +22,10 @@ int main(){
 
             if(grid[i][j] == 'o'){
                 top[j] = i+1;
-                if(top[j] > lowest){ //lowest 紀錄最靠近下面的'o'的高度
+                if(top[j] > lowest){
                     lowest = top[j];
                 }
             }
-            // else if(floor[j] > i && grid[i][j] == 'x'){
-            //     floor[j] =  i;
-            // }
         }
     }
 
