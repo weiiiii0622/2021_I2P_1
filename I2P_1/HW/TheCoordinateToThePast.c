@@ -39,7 +39,7 @@ void decode(char* str){
             sum += convert[temp_str[p]];
         }
 
-        char b[10001];
+        char b[1000];
         demi_to_hex(sum, b);
         decode(b);
 
@@ -48,7 +48,7 @@ void decode(char* str){
             sum += convert[temp_str[p]];
         }
 
-        char d[10001];
+        char d[1000];
         demi_to_hex(sum, d);
         decode(d);
     }
@@ -56,7 +56,7 @@ void decode(char* str){
 
 
 void demi_to_hex(int x, char* arr){
-    char a[99999];
+    char a[999];
     int i=0;
     while(x>0){
         a[i++] = hex[x%16];
