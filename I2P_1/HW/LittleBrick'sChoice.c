@@ -28,11 +28,6 @@ int main(){
 void add(char ch, int digit, int pos){
     password[digit] = ch;
 
-    // for(int i=0; i<digit; i++){
-    //     printf("%c", password[i]);
-    // }
-    // printf("\n");
-
     if(digit < 4){
         for(int i=1; i<len-pos; i++){
             add(word[pos+i], digit+1, pos+i);
@@ -53,7 +48,6 @@ void add(char ch, int digit, int pos){
             add(word[pos+i], digit+1, pos+i);
         }
     }
-
 }
 
 void bubble_sort(char* arr, int n){

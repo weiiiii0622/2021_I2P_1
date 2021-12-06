@@ -1,30 +1,51 @@
 #include <stdio.h>
-#include <string.h>
-char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-char b[100000];
-char *demi_to_hex(int x){
-    char a[99999];
-    int i=0;
-    while(x>0){
-        a[i++] = hex[x%16];
-        x = x/16;
-    }
-    a[i] = '\0';
-    for(int j=strlen(a)-1, k=0; j>=-1; j--, k++){
-        if(j!=-1){
-            b[k] = a[j];
+
+int way;
+int n;
+int binary_tree[5005];
+
+
+void res(int node){
+    if (way==0){
+        printf("%d ", binary_tree[node]);
+        
+        if (2*node <= n){
+            res(2*node);
         }
-        else{
-            b[k] = '\0';
+        if (2*node+1 <= n){
+            res(2*node+1);
         }
     }
-    return b;
+    if (way==2){
+        if (2*node <= n){
+            res(2*node);
+        }
+        if (2*node+1 <= n){
+            res(2*node+1);
+        }
+        printf("%d ", binary_tree[node]);
+    }
+    if (way==1){
+        if (2*node <= n){
+            res(2*node);
+        }
+        printf("%d ", binary_tree[node]);
+        if (2*node+1 <= n){
+            res(2*node+1);
+        }
+    }
 }
 
-
 int main(){
-    printf("%s %d\n", demi_to_hex(30), strlen(demi_to_hex(30)));
-    printf("%s %d\n", demi_to_hex(300), strlen(demi_to_hex(300)));
+    
+    scanf("%d",&way);
+    scanf("%d",&n);
+    
+    for (int i=1;i<=n;i++){
+        scanf("%d", &binary_tree[i]);
+    }
+
+    res(1);
 
     return 0;
 }
