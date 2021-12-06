@@ -2,7 +2,7 @@
 #include <string.h>
 
 void bubble_sort(char*, int);
-void add(char, int, int);
+void add(int, int);
 
 char word[20];
 char password[20];
@@ -15,7 +15,7 @@ int main(){
     bubble_sort(word, len);
 
     for(int i=0; i<len-4; i++){
-        add(word[i], 1, i);
+        add(1, i);
     }
     for(int i=len-4; i<len; i++){
         printf("%c", word[i]);
@@ -25,17 +25,12 @@ int main(){
     return 0;
 }
 
-void add(char ch, int digit, int pos){
-    password[digit] = ch;
-
-    // for(int i=0; i<digit; i++){
-    //     printf("%c", password[i]);
-    // }
-    // printf("\n");
+void add(int digit, int pos){
+    password[digit] = word[pos];
 
     if(digit < 4){
         for(int i=1; i<len-pos; i++){
-            add(word[pos+i], digit+1, pos+i);
+            add(digit+1, pos+i);
         }
     }
     else if(digit == len){
@@ -50,7 +45,7 @@ void add(char ch, int digit, int pos){
         }
         printf(", ");
         for(int i=1; i<len-pos; i++){
-            add(word[pos+i], digit+1, pos+i);
+            add(digit+1, pos+i);
         }
     }
 
