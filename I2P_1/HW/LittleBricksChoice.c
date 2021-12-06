@@ -48,7 +48,6 @@ void add(int digit, int pos){
             add(digit+1, pos+i);
         }
     }
-
 }
 
 void bubble_sort(char* arr, int n){
