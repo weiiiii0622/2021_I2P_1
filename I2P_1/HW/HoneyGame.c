@@ -3,8 +3,8 @@
 
 int Pooh_turn(int);
 int Piglet_turn(int);
-int status[10001][2] = {-1};
 
+int status[10001][2];
 int a, b;
 
 int main(){
