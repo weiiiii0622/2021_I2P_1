@@ -1,51 +1,91 @@
-#include<stdio.h>
-#define num 11111
+#include <stdio.h>
+#include <string.h>
 
-void postorder(int);
-void inorder(int);
-void preorder(int);
+int Pooh(int);
+int Piglet(int);
 
-int tree[num] = {0};
-int main () {
-    int x,y,i;
-    int n = 1;
+int T;
+int n, a, b, Ma, Mb;
+char name[7];
+int status[100005][2];
 
-    scanf("%d",&x);
-    scanf("%d",&y);
-    for(i = 1; i <= y; i++){
-        scanf("%d",&tree[i]);
+int main(){
+
+    scanf("%d", &T);
+
+    while(T--){
+        memset(status, -1, 100005*2*sizeof(status[0][0]));
+        scanf("%d %d %d %d %d %s", &n, &a, &b, &Ma, &Mb, name);
+        for(int i=0; i<Ma; i++){
+            int temp;
+            scanf("%d", &temp);
+            status[temp][0] = 1;
+        }
+        for(int i=0; i<Mb; i++){
+            int temp;
+            scanf("%d", &temp);
+            status[temp][1] = 1;
+        }
+
+        if(name[1] == 'o'){
+            if(Pooh(n)){
+                printf("Pooh\n");
+            }
+            else{
+                printf("Piglet\n");
+            }
+        }
+        else{
+            if(Piglet(n)){
+                printf("Piglet\n");
+            }
+            else{
+                printf("Pooh\n");
+            }
+        }
+
     }
 
-    if(x == 0){
-        preorder(1);
+    return 0;
+}
+
+int Pooh(int n){
+    if(status[n][0] != -1){
+        return status[n][0];
     }
-    if(x == 1){
-        inorder(1);
+    if(n <= a){
+        return status[n][0] = 1;
     }
-    if(x == 2){
-        postorder(1);
+
+    for(int i=1; i<=a; i++){
+        if(!(Piglet(n-i))){
+            return status[n][0] = 1;
+        }
     }
+
+    for(int i=1; i<=b; i++){
+        status[n+i][1] = 1;
+    }
+    return status[n][0] = 0;
 
 }
 
-void preorder(int n){
-    if(tree[n] != 0){
-        printf("%d ",tree[n]);
-        preorder(2 * n);
-        preorder(2 * n + 1);
+int Piglet(int n){
+    if(status[n][1] != -1){
+        return status[n][1];
     }
-}
-void inorder(int n){
-    if(tree[n] != 0){
-        inorder(2 * n);
-        printf("%d ",tree[n]);
-        inorder(2 * n + 1);
+    if(n <= b){
+        return status[n][1] = 1;
     }
-}
-void postorder(int n){
-    if(tree[n] != 0){
-        postorder(2 * n);
-        postorder(2 * n + 1);
-        printf("%d ",tree[n]);
+
+    for(int i=1; i<=b; i++){
+        if(!(Pooh(n-i))){
+            return status[n][1] = 1;
+        }
     }
+
+    for(int i=1; i<=a; i++){
+        status[n+i][0] = 1;
+    }
+    return status[n][1] = 0;
 }
