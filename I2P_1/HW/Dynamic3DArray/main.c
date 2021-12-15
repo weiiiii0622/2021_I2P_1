@@ -4,6 +4,7 @@ unsigned random_seed=7122;
 unsigned Random(){
 	return random_seed=random_seed*0xdefaced+1;
 }
+
 int main(){
 	int n,m,k,_;
 	scanf("%d%d%d%d%u",&_,&n,&m,&k,&random_seed);
@@ -30,3 +31,4 @@ int main(){
 	}
 	return 0;
 }
+

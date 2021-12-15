@@ -1,51 +1,59 @@
 #include<stdio.h>
-#define num 11111
+#include<stdlib.h>
 
-void postorder(int);
-void inorder(int);
-void preorder(int);
+unsigned**** new_4d_array(unsigned n,unsigned m,unsigned k,unsigned l){
+    unsigned**** ln;
+    unsigned*** lm;
+    unsigned** lk;
+    unsigned* ll;
 
-int tree[num] = {0};
-int main () {
-    int x,y,i;
-    int n = 1;
+    ln = (unsigned****) malloc(n*sizeof(unsigned***));
+    lm = (unsigned***) malloc(n*m*sizeof(unsigned**));
+    lk = (unsigned**) malloc(n*m*k*sizeof(unsigned*));
+    ll = (unsigned*) malloc(n*m*k*l*sizeof(unsigned));
 
-    scanf("%d",&x);
-    scanf("%d",&y);
-    for(i = 1; i <= y; i++){
-        scanf("%d",&tree[i]);
+    for(int i=0; i<n; i++){
+        ln[i] = lm + i*m;
+        for(int j=0; j<m; j++){
+            lm[i*m+j] = lk + (i*m+j)*k;
+            for(int t=0; t<k; t++){
+                lk[(i*m+j)*k+t] = ll + ((i*m+j)*k+t)*l;
+            }
+        }
     }
 
-    if(x == 0){
-        preorder(1);
-    }
-    if(x == 1){
-        inorder(1);
-    }
-    if(x == 2){
-        postorder(1);
-    }
-
+    return ln;
 }
 
-void preorder(int n){
-    if(tree[n] != 0){
-        printf("%d ",tree[n]);
-        preorder(2 * n);
-        preorder(2 * n + 1);
+
+int main(){
+	int n,m,k,l;
+	scanf("%d%d%d%d",&n,&m,&k,&l);
+    unsigned ****arr=new_4d_array(n,m,k,l);
+    int i,j,q,p,count=0;
+    for(i=0;i<n;++i){
+        for(j=0;j<m;++j){
+            for(q=0;q<k;++q){
+                for(p=0;p<l;p++){
+                    arr[i][j][q][p]=count;
+                    count++;
+                }
+            }
+        }
     }
-}
-void inorder(int n){
-    if(tree[n] != 0){
-        inorder(2 * n);
-        printf("%d ",tree[n]);
-        inorder(2 * n + 1);
+
+    for(i=0;i<n;++i){
+        for(j=0;j<m;++j){
+            for(q=0;q<k;++q){
+                for(p=0;p<l;p++){
+                    printf("%3u ", arr[i][j][q][p]);
+                }
+                printf("\n");
+            }
+            printf("\n");
+        }
+        printf("\n");
     }
-}
-void postorder(int n){
-    if(tree[n] != 0){
-        postorder(2 * n);
-        postorder(2 * n + 1);
-        printf("%d ",tree[n]);
-    }
+
+	return 0;
 }
