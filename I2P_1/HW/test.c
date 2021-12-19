@@ -68,6 +68,7 @@ int Pooh(int n){
     }
     return status[n][0] = 0;
 
+    return ln;
 }
 
 int Piglet(int n){

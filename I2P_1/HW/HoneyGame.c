@@ -18,8 +18,7 @@ int main(){
         memset(status, -1, 10001*2*sizeof(status[0][0]));
         scanf("%d %d %d %s", &n, &a, &b, name);
         if(name[1]=='o'){
-            int result = Pooh_turn(n);
-            if(result == 1){
+            if(Pooh_turn(n)){
                 printf("Pooh\n");
             }
             else{
@@ -27,8 +26,7 @@ int main(){
             }
         }
         else{
-            int result = Piglet_turn(n);
-            if(result == 1){
+            if(Piglet_turn(n)){
                 printf("Piglet\n");
             }
             else{
