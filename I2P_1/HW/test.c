@@ -1,92 +1,103 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-int Pooh(int);
-int Piglet(int);
+typedef struct substr{
+    int occurrence;
+    char* substr;
+} SubStr;
 
-int T;
-int n, a, b, Ma, Mb;
-char name[7];
-int status[100005][2];
+char str[3005], p[3005];
+int str_check[26], p_check[26];
+int n, substr_count;
+SubStr arr[3005];
+
+void sort();
 
 int main(){
 
-    scanf("%d", &T);
+    scanf("%s %d", str, &n);
+    scanf("%s", p);
+    for(int i=0; i<strlen(p); i++){
+        p_check[p[i]-'a'] += 1;
+    }
+    
 
-    while(T--){
-        memset(status, -1, 100005*2*sizeof(status[0][0]));
-        scanf("%d %d %d %d %d %s", &n, &a, &b, &Ma, &Mb, name);
-        for(int i=0; i<Ma; i++){
-            int temp;
-            scanf("%d", &temp);
-            status[temp][0] = 1;
+    for(int i=0; i<=strlen(str)-n; i++){
+        int j=0, flag=1;
+        char *temp_str = (char*) malloc((n+5)*sizeof(char));
+        memset(str_check, 0, 26*sizeof(int));
+        while(j<n){
+            temp_str[j] = str[i+j];
+            str_check[str[i+j]-'a'] += 1;
+            j++;
         }
-        for(int i=0; i<Mb; i++){
-            int temp;
-            scanf("%d", &temp);
-            status[temp][1] = 1;
+        temp_str[n] = '\0';
+
+        for(int i=0; i<26; i++){
+            if(str_check[i]!=p_check[i]){
+                flag = 0;
+                break;
+            }
         }
 
-        if(name[1] == 'o'){
-            if(Pooh(n)){
-                printf("Pooh\n");
+        if(flag!=0){
+            if(substr_count == 0){
+                arr[substr_count].substr = temp_str;
+                arr[0].occurrence = 1;
+                substr_count += 1;
             }
             else{
-                printf("Piglet\n");
-            }
+                int flag = 0;
+                for(int i=0; i<substr_count; i++){
+                    if(strcmp(temp_str, arr[i].substr) == 0){
+                        arr[i].occurrence += 1;
+                        flag = 1;
+                        break;
+                    }
+                }
+                if(flag == 0){
+                    arr[substr_count].substr = temp_str;
+                    arr[substr_count].occurrence = 1;
+                    substr_count += 1;
+                }
+            }  
         }
-        else{
-            if(Piglet(n)){
-                printf("Piglet\n");
-            }
-            else{
-                printf("Pooh\n");
-            }
-        }
+    }
 
+    sort();
+
+    printf("%d\n", substr_count);
+    for(int i=0; i<substr_count; i++){
+        printf("%s %d\n", arr[i].substr, arr[i].occurrence);
     }
 
     return 0;
 }
 
-int Pooh(int n){
-    if(status[n][0] != -1){
-        return status[n][0];
-    }
-    if(n <= a){
-        return status[n][0] = 1;
-    }
+void sort(){
+    for(int i=0; i<substr_count; i++){
+        for(int j=i; j<substr_count; j++){
+            if(arr[j].occurrence > arr[i].occurrence){
+                int temp = arr[i].occurrence;
+                arr[i].occurrence = arr[j].occurrence;
+                arr[j].occurrence = temp;
 
-    for(int i=1; i<=a; i++){
-        if(!(Piglet(n-i))){
-            return status[n][0] = 1;
+                char *pt = arr[i].substr;
+                arr[i].substr = arr[j].substr;
+                arr[j].substr = pt;
+            }
+            else if(arr[j].occurrence == arr[i].occurrence){
+                if(strcmp(arr[j].substr, arr[i].substr) < 0){
+                int temp = arr[i].occurrence;
+                arr[i].occurrence = arr[j].occurrence;
+                arr[j].occurrence = temp;
+
+                char *pt = arr[i].substr;
+                arr[i].substr = arr[j].substr;
+                arr[j].substr = pt; 
+                }
+            }
         }
     }
-
-    for(int i=1; i<=b; i++){
-        status[n+i][1] = 1;
-    }
-    return status[n][0] = 0;
-
-    return ln;
-}
-
-int Piglet(int n){
-    if(status[n][1] != -1){
-        return status[n][1];
-    }
-    if(n <= b){
-        return status[n][1] = 1;
-    }
-
-    for(int i=1; i<=b; i++){
-        if(!(Pooh(n-i))){
-            return status[n][1] = 1;
-        }
-    }
-
-    for(int i=1; i<=a; i++){
-        status[n+i][0] = 1;
-    }
-    return status[n][1] = 0;
 }
