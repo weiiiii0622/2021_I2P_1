@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #define MAX_SIZE 500
 
@@ -13,7 +14,6 @@ void solve();
 int main(){
 
     fgets(input, MAX_SIZE, stdin);
-    //scanf("%s", input);
     solve();
     printf("%s", content);
     return 0;
@@ -31,8 +31,12 @@ void solve(){
             cursor_inp += 1;
             if(*(cursor_inp) == 'b'){
                 cursor_inp += 9;
+
+                if(len-content == 0){
+                    flag = 0;
+                }
                 
-                if((cursor_con-content) != -1){
+                if(flag != 0){
                     int i=0;
                     while(cursor_con+i < len){
                         *(cursor_con+i) = *(cursor_con+i+1);
@@ -45,7 +49,15 @@ void solve(){
             }
             else if(*(cursor_inp) == 'n'){
                 cursor_inp += 7;
-                *(++cursor_con) = '\n';
+                if(flag == 0){
+                    *(cursor_con) = '\n';
+                    flag=1;
+                }
+                else{
+                    *(++cursor_con) = '\n';
+                    len++;
+                }
+                
             }
             else if(*(cursor_inp) == 'l'){
                 cursor_inp += 4;
@@ -74,8 +86,7 @@ void solve(){
                 *(cursor_con) = *(cursor_inp);
             }
             else{
-                cursor_con += 1;
-                *(cursor_con) = *(cursor_inp);
+                *(++cursor_con) = *(cursor_inp);
                 len += 1;
             }
             cursor_inp += 1;
