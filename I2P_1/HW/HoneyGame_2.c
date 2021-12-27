@@ -14,7 +14,7 @@ int main(){
     scanf("%d", &T);
 
     while(T--){
-        memset(status, -1, 100005*sizeof(status[0]));
+        memset(status_Pooh, -1, 100005*sizeof(status[0]));
         scanf("%d %d %d %d %d %s", &n, &a, &b, &Ma, &Mb, name);
         for(int i=0; i<Ma; i++){
             int temp;
