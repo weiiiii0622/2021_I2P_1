@@ -12,6 +12,7 @@ int n, m;
 Cat arr[10001];
 
 void swap(int, int);
+int cmp();
 
 int main(){
     while(scanf("%d %d", &n, &m) != EOF){
@@ -47,36 +48,8 @@ int main(){
                 }
         }
 
-        for(int i=0; i<n; i++){
-            for(int j=i+1; j<n; j++){
+        qsort(arr, n, sizeof(Cat), cmp);
 
-                if(arr[j].occupation < arr[i].occupation){
-                    swap(i, j);
-                }
-                else if(arr[j].occupation == arr[i].occupation){
-                    if(arr[j].occupation == 5){
-                        if(arr[j].age < arr[i].age){
-                            swap(i, j);
-                        }
-                        else if(arr[j].age == arr[i].age){
-                            if(strcmp(arr[j].name, arr[i].name) < 0){
-                                swap(i, j);
-                            }
-                        }
-                    }
-                    else{
-                        if(arr[j].age > arr[i].age){
-                            swap(i, j);
-                        }
-                        else if(arr[j].age == arr[i].age){
-                            if(strcmp(arr[j].name, arr[i].name) < 0){
-                                swap(i, j);
-                            }
-                        }
-                    }
-                }
-            }
-        }
         for(int i=0; i<m&&i<n; i++){
             printf("%s\n", arr[i].name);
         }
@@ -85,15 +58,30 @@ int main(){
     return 0;
 }
 
-void swap(int i, int j){
-    char *temp_name = arr[i].name;
-    int temp_occu = arr[i].occupation, temp_age = arr[i].age;
+int cmp(const void *lhs, const void *rhs){
+    Cat a = *(Cat*)lhs;
+    Cat b = *(Cat*)rhs;
 
-    arr[i].name = arr[j].name;
-    arr[i].occupation = arr[j].occupation;
-    arr[i].age = arr[j].age;
-
-    arr[j].name = temp_name;
-    arr[j].occupation = temp_occu;
-    arr[j].age = temp_age;
+    if(b.occupation < a.occupation){
+        return 1;
+    }
+    else if(b.occupation == a.occupation){
+        if(b.occupation == 5){
+            if(b.age < a.age){
+                return 1;
+            }
+            else if(b.age == a.age){
+                return strcmp(a.name, b.name);
+            }
+        }
+        else{
+            if(b.age > a.age){
+                return 1;
+            }
+            else if(b.age == a.age){
+                return strcmp(a.name, b.name);
+            }
+        }
+    }
+    return -1;
 }
